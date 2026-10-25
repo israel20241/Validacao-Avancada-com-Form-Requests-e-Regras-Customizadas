@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Livro;
 use App\Models\Autor;
 use App\Services\Operations;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreLivroRequest;
+use App\Http\Requests\UpdateLivroRequest;
 
 class LivroController extends Controller
 {
@@ -25,23 +26,18 @@ class LivroController extends Controller
         return view('livros.new_livro', ['autores' => $autores]);
     }
 
-    public function newLivroSubmit(Request $request)
+    // Injeção de dependência do Form Request no cadastro de Livro
+    public function newLivroSubmit(StoreLivroRequest $request)
     {
-        $request->validate([
-            'titulo'          => 'required|min:2|max:150',
-            'genero'          => 'nullable|max:50',
-            'numero_paginas'  => 'nullable|integer',
-            'autor_id'        => 'required|exists:autores,id',
-            'data_publicacao' => 'required|date',
-        ]);
+        $validated = $request->validated();
 
         $livro = new Livro();
         $livro->user_id = session('user.id'); 
-        $livro->titulo = $request->titulo;
-        $livro->genero = $request->genero;
-        $livro->numero_paginas = $request->numero_paginas;
-        $livro->autor_id = $request->autor_id; 
-        $livro->data_publicacao = $request->data_publicacao;
+        $livro->titulo = $validated['titulo'];
+        $livro->genero = $validated['genero'] ?? null;
+        $livro->numero_paginas = $validated['numero_paginas'] ?? null;
+        $livro->autor_id = $validated['autor_id']; 
+        $livro->data_publicacao = $validated['data_publicacao'];
         $livro->save();
 
         return redirect()->route('home');
@@ -68,19 +64,12 @@ class LivroController extends Controller
         ]);
     }
 
-    public function editLivroSubmit(Request $request)
+    // Injeção de dependência do Form Request na edição de Livro
+    public function editLivroSubmit(UpdateLivroRequest $request)
     {
         if ($request->livro_id === null) {
             return redirect()->route('home');
         }
-
-        $request->validate([
-            'titulo'          => 'required|min:2|max:150',
-            'genero'          => 'nullable|max:50',
-            'numero_paginas'  => 'nullable|integer',
-            'autor_id'        => 'required|exists:autores,id',
-            'data_publicacao' => 'required|date',
-        ]);
 
         $decrypted_id = Operations::decryptId($request->livro_id);
         
@@ -94,11 +83,13 @@ class LivroController extends Controller
             return redirect()->route('home');
         }
 
-        $livro->titulo = $request->titulo;
-        $livro->genero = $request->genero;
-        $livro->numero_paginas = $request->numero_paginas;
-        $livro->autor_id = $request->autor_id;
-        $livro->data_publicacao = $request->data_publicacao;
+        $validated = $request->validated();
+
+        $livro->titulo = $validated['titulo'];
+        $livro->genero = $validated['genero'] ?? null;
+        $livro->numero_paginas = $validated['numero_paginas'] ?? null;
+        $livro->autor_id = $validated['autor_id'];
+        $livro->data_publicacao = $validated['data_publicacao'];
         $livro->save();
 
         return redirect()->route('home');

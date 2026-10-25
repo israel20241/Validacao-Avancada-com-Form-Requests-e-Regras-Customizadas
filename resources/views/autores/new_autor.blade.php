@@ -1,76 +1,21 @@
-@extends('layouts.main_layout')
+<form action="{{ route('autores.new_autor_submit') }}" method="POST">
+    @csrf
 
-@section('content')
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col">
-
-            @include('top_bar')
-
-            <div class="row">
-                <div class="col">
-                    <p class="display-6 mb-0">NOVO AUTOR</p>
-                </div>
-                <div class="col text-end">
-                    <a href="{{ route('autores_index') }}" class="btn btn-outline-danger">
-                        <i class="fa-solid fa-xmark"></i>
-                    </a>
-                </div>
-            </div>
-
-            <form action="{{ route('newAutorSubmit') }}" method="post">
-                @csrf
-                
-                <div class="row mt-3">
-                    <div class="col">
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Nome do Autor</label>
-                            <input type="text" class="form-control bg-primary text-white" name="nome" value="{{ old('nome') }}">
-                            @error('nome')
-                            <div class="text-danger mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Gênero</label>
-                                <input type="text" class="form-control bg-primary text-white" name="genero" value="{{ old('genero') }}">
-                                @error('genero')
-                                <div class="text-danger mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nacionalidade</label>
-                                <input type="text" class="form-control bg-primary text-white" name="nacionalidade" value="{{ old('nacionalidade') }}">
-                                @error('nacionalidade')
-                                <div class="text-danger mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label">Data de Nascimento</label>
-                            <!-- Usando type="date" para o navegador abrir o calendário automático -->
-                            <input type="date" class="form-control bg-primary text-white" name="data_nascimento" value="{{ old('data_nascimento') }}">
-                            @error('data_nascimento')
-                            <div class="text-danger mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                    </div>
-                </div>
-                
-                <div class="row mt-3">
-                    <div class="col text-end">
-                        <a href="{{ route('autores_index') }}" class="btn btn-primary px-5"><i class="fa-solid fa-ban me-2"></i>Cancelar</a>
-                        <button type="submit" class="btn btn-secondary px-5"><i class="fa-regular fa-circle-check me-2"></i>Salvar Autor</button>
-                    </div>
-                </div>
-            </form>
-
-        </div>
+    <div class="mb-3">
+        <label for="nome" class="form-label">Nome do Autor</label>
+        <input type="text" name="nome" id="nome" class="form-control @error('nome') is-invalid @enderror" value="{{ old('nome') }}">
+        @error('nome')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
     </div>
-</div>
-@endsection
+
+    <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}">
+        @error('email')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>

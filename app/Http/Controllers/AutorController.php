@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Autor;
 use App\Services\Operations;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreAutorRequest;
+use App\Http\Requests\UpdateAutorRequest;
 
 class AutorController extends Controller
 {
@@ -14,7 +15,6 @@ class AutorController extends Controller
         $autores = Autor::all();
 
         return view('autores.autores_index', ['autores' => $autores]);
-
     }
 
     public function newAutor()
@@ -22,23 +22,20 @@ class AutorController extends Controller
         return view('autores.new_autor');
     }
 
-    public function newAutorSubmit(Request $request)
+    // Injeção de dependência do Form Request no cadastro de Autor
+    public function newAutorSubmit(StoreAutorRequest $request)
     {
-        $request->validate([
-            'nome'            => 'required|min:3|max:100',
-            'genero'          => 'nullable|max:50',
-            'nacionalidade'   => 'nullable|max:50',
-            'data_nascimento' => 'nullable|date',
-        ]);
+        // Pega os dados já validados do Form Request
+        $validated = $request->validated();
 
         $autor = new Autor();
-        $autor->nome = $request->nome;
-        $autor->genero = $request->genero;
-        $autor->nacionalidade = $request->nacionalidade;
-        $autor->data_nascimento = $request->data_nascimento;
+        $autor->nome = $validated['nome'];
+        $autor->genero = $validated['genero'] ?? null;
+        $autor->nacionalidade = $validated['nacionalidade'] ?? null;
+        $autor->data_nascimento = $validated['data_nascimento'] ?? null;
         $autor->save();
 
-        return redirect()->route('home');
+        return redirect()->route('autores_index');
     }
 
     public function editAutor($id)
@@ -58,18 +55,12 @@ class AutorController extends Controller
         return view('autores.edit_autor', ['autor' => $autor]);
     }
 
-    public function editAutorSubmit(Request $request)
+    // Injeção de dependência do Form Request na edição de Autor
+    public function editAutorSubmit(UpdateAutorRequest $request)
     {
         if ($request->autor_id === null) {
             return redirect()->route('autores_index');
         }
-
-        $request->validate([
-            'nome'            => 'required|min:3|max:100',
-            'genero'          => 'nullable|max:50',
-            'nacionalidade'   => 'nullable|max:50',
-            'data_nascimento' => 'nullable|date',
-        ]);
 
         $decrypted_id = Operations::decryptId($request->autor_id);
         
@@ -83,10 +74,13 @@ class AutorController extends Controller
             return redirect()->route('autores_index');
         }
 
-        $autor->nome = $request->nome;
-        $autor->genero = $request->genero;
-        $autor->nacionalidade = $request->nacionalidade;
-        $autor->data_nascimento = $request->data_nascimento;
+        // Pega os dados validados
+        $validated = $request->validated();
+
+        $autor->nome = $validated['nome'];
+        $autor->genero = $validated['genero'] ?? null;
+        $autor->nacionalidade = $validated['nacionalidade'] ?? null;
+        $autor->data_nascimento = $validated['data_nascimento'] ?? null;
         $autor->save();
 
         return redirect()->route('autores_index');
