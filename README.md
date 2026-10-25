@@ -4,7 +4,7 @@ Este projeto é uma aplicação Laravel (**Projeto Biblioteca**) desenvolvida pa
 
 ---
 
-## 🛠️ Funcionalidades Demonstradas
+## Funcionalidades Demonstradas
 
 - **Isolamento de Validação**: Substituição da validação direta nos Controllers por classes dedicadas de Form Request (`StoreAutorRequest`, `UpdateAutorRequest`, `StoreLivroRequest`, `UpdateLivroRequest`).
 - **Injeção de Dependência**: Injeção automática dos Form Requests nas assinaturas dos métodos do Controller (`AutorController` e `LivroController`).
@@ -13,7 +13,7 @@ Este projeto é uma aplicação Laravel (**Projeto Biblioteca**) desenvolvida pa
 
 ---
 
-## 📋 Requisitos para Execução
+## Requisitos para Execução
 
 Para rodar este projeto em um ambiente local, você precisará de:
 
@@ -21,12 +21,3 @@ Para rodar este projeto em um ambiente local, você precisará de:
 - **Composer**: Versão `>= 2.0`
 - **Servidor de Banco de Dados**: MySQL / MariaDB (ou SQLite)
 - **Node.js & NPM** (opcional, caso queira compilar os assets com Vite)
-
----
-
-## 🚀 Passo a Passo para Executar o Projeto Localmente
-
-1. **Clonar o repositório:**
-   ```bash
-   git clone [https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git](https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git)
-   cd NOME_DO_REPOSITORIO
