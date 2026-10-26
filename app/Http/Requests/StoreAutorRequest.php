@@ -9,7 +9,7 @@ class StoreAutorRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // Permitir a requisição (pode ajustar conforme middleware de auth)
+        return true;
     }
 
     public function rules(): array

@@ -26,7 +26,6 @@ class LivroController extends Controller
         return view('livros.new_livro', ['autores' => $autores]);
     }
 
-    // Injeção de dependência do Form Request no cadastro de Livro
     public function newLivroSubmit(StoreLivroRequest $request)
     {
         $validated = $request->validated();
@@ -64,7 +63,6 @@ class LivroController extends Controller
         ]);
     }
 
-    // Injeção de dependência do Form Request na edição de Livro
     public function editLivroSubmit(UpdateLivroRequest $request)
     {
         if ($request->livro_id === null) {

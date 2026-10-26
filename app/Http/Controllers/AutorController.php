@@ -22,10 +22,8 @@ class AutorController extends Controller
         return view('autores.new_autor');
     }
 
-    // Injeção de dependência do Form Request no cadastro de Autor
     public function newAutorSubmit(StoreAutorRequest $request)
     {
-        // Pega os dados já validados do Form Request
         $validated = $request->validated();
 
         $autor = new Autor();
@@ -55,7 +53,6 @@ class AutorController extends Controller
         return view('autores.edit_autor', ['autor' => $autor]);
     }
 
-    // Injeção de dependência do Form Request na edição de Autor
     public function editAutorSubmit(UpdateAutorRequest $request)
     {
         if ($request->autor_id === null) {
@@ -74,7 +71,6 @@ class AutorController extends Controller
             return redirect()->route('autores_index');
         }
 
-        // Pega os dados validados
         $validated = $request->validated();
 
         $autor->nome = $validated['nome'];
